@@ -12,7 +12,7 @@ const selectStyle = {
 function PokeSelector({handleChange, item}){
     return (
         <select
-        onChange={e=> handleChange(e.target.value)}
+        onChange={e => handleChange(e.target.value)}
         style={selectStyle}
         disabled={!item.length}
         >
@@ -44,7 +44,10 @@ const selectorPos = {
 
 function PokeHeader({
     isLoaded,
+    changeRegion,
     changeLocation,
+    changeArea,
+    explore,
     regions = [],
     locations = [],
     areas = [],
@@ -53,10 +56,16 @@ function PokeHeader({
         <header style={headerDesign}>
             <PokeLogo />
             <div style={selectorPos}>
-            <PokeSelector handleChange={changeLocation} item={regions}/>
-            <PokeSelector item={locations}/>
-            <PokeSelector item={areas}/>
-            <PokeButton />
+            {!isLoaded? (
+                'Loading ...'
+            ): (
+            <React.Fragment>
+                <PokeSelector handleChange={changeRegion} item={regions}/>
+                <PokeSelector handleChange={changeLocation} item={locations}/>
+                <PokeSelector handleChange={changeArea} item={areas}/>
+                <PokeButton expArea={explore} />
+            </React.Fragment>
+            )}    
             </div>
         </header>
     )

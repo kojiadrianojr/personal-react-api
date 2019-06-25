@@ -1,7 +1,6 @@
 import React from 'react';
 
 const logoCont =  {
-    border: '1px solid black',
     maxHeight: '35px',
     maxWidth: '100px',
     overflow: 'hidden',

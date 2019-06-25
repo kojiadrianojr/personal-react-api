@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import './App.css';
 
 import {PokeApi} from './config/apiConfig';
 import PokeHeader from './component/Header/PokeHeader';
+import PokeMain from './component/body/pokeMain';
+
+
+import './App.css';
 
 export default class App extends Component {
   constructor(){
@@ -14,6 +17,7 @@ export default class App extends Component {
       areas: [],
       pokemonEncounter: [],
       currPokemon: [],
+      bag: [],
     }
   }
 
@@ -47,7 +51,6 @@ export default class App extends Component {
         return reg
       })
       .then(reg => {
-        console.log(reg)
         this.setState({
           isLoaded: true,
           regions: reg.regions,
@@ -59,14 +62,96 @@ export default class App extends Component {
     })
   }
 
+  handleRegionChange = (name) => {
+    PokeApi.get(`region/${name}`).then(res=>{
+      return res
+    }).then(res => {
+      this.setState({
+        locations: res.data.locations
+      })
+      return res
+    })
+    .then(res => {
+      return PokeApi.get(`location/${res.data.locations[0].name}`)
+      .then(loc=>{
+        this.setState({
+          areas: loc.data.areas
+        })
+        return loc
+      })
+    })
+    .then(res=>{
+      return PokeApi.get(`location-area/${res.data.areas[0].name}`)
+      .then(poks => {
+        this.setState({
+          pokemonEncounter: poks.data.pokemon_encounters
+        })
+      })
+    }).catch(err => {
+      this.setState({
+        pokemonEncounter: [],
+      })
+      return 'empty'
+    })
+  }
+
   handleLocationChange = (name) => {
-    console.log('Location: ', name);
+    PokeApi.get(`location/${name}`).then(res=>{
+      return res.data.areas
+    }).then(ar => {
+      this.setState({
+        areas: ar
+      })
+      return ar
+    }).then(ar => {
+      return PokeApi.get(`location-area/${ar[0].name}`)
+      .then(poks => {
+        this.setState({
+          pokemonEncounter: poks.data.pokemon_encounters
+        })
+      })
+    }).catch(err=>{
+      return 'empty'
+    })
+  }
+
+  handleAreaChange = (name) => {
+    PokeApi.get(`location-area/${name}`).then(res=>{
+      return res.data.pokemon_encounters
+    }).then(poks => {
+      this.setState({
+        pokemonEncounter: poks
+      })
+    })
+  }
+
+  explore = () => {
+    var totalEncounter = this.state.pokemonEncounter.length
+    var randomPoks = Math.floor(Math.random() * totalEncounter)
+    this.setState({
+      currPokemon: this.state.pokemonEncounter[randomPoks]
+    })
+
   }
 
 
   render(){
     return (
-      <PokeHeader regions={this.state.regions} locations={this.state.locations} areas={this.state.areas} changeLocation={this.handleLocationChange} isLoaded={this.state.isLoaded} />
+     <div className="App">
+      <PokeHeader 
+        regions={this.state.regions} 
+        locations={this.state.locations} 
+        areas={this.state.areas} 
+        changeRegion={this.handleRegionChange}
+        changeLocation={this.handleLocationChange} 
+        changeArea={this.handleAreaChange}
+        isLoaded={this.state.isLoaded}
+        explore={this.explore}
+        />
+        <div className="pokeContainer">
+          <PokeMain/>          
+        </div>
+   </div>
     )
   }
 
