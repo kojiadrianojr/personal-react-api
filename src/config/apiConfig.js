@@ -5,4 +5,4 @@ const PokeApi = axios.create({
     baseURL: ' https://pokeapi.co/api/v2'
 })
 
-export {PokeApi};
+export { PokeApi };

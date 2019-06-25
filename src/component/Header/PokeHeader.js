@@ -9,9 +9,10 @@ const selectStyle = {
 
 
 
-function PokeSelector({item}){
+function PokeSelector({handleChange, item}){
     return (
         <select
+        onChange={e=> handleChange(e.target.value)}
         style={selectStyle}
         disabled={!item.length}
         >
@@ -42,22 +43,21 @@ const selectorPos = {
 
 
 function PokeHeader({
-    isLoading,
+    isLoaded,
+    changeLocation,
     regions = [],
     locations = [],
     areas = [],
-    
 }) {
     return (
         <header style={headerDesign}>
             <PokeLogo />
             <div style={selectorPos}>
-            <PokeSelector item={regions}/>
+            <PokeSelector handleChange={changeLocation} item={regions}/>
             <PokeSelector item={locations}/>
             <PokeSelector item={areas}/>
             <PokeButton />
             </div>
-          
         </header>
     )
 }

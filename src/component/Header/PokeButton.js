@@ -1,5 +1,4 @@
 import React from 'react';
-import img from '../../img/pokeball.png';
 import '../fonts/fonts.css';
 
 const buttonStyle = {
