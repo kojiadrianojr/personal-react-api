@@ -1,13 +1,6 @@
 .App {
   text-align: center;
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -31,3 +24,56 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background-image: url(./img/wallpaper.jpg);
+}
+
+.pokeContainer{
+  color: white;
+  max-width: 75%;
+  min-height: 80vh;
+  margin: 50px auto;
+  display: grid;
+  grid-gap: 25px;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
+  grid-template-areas:
+   "hint hint"
+   "display bag" 
+   "stats bag"
+}
+
+.message{
+  grid-area: hint;
+  background-color: rgba(0, 0, 0,0.4);
+  border: 5px outset white;
+  border-right: 5px inset white;
+  border-bottom: none;
+  padding: 10px;
+}
+
+.display{
+  grid-area: display;
+  border-left: 5px outset white;
+  background-color: rgba(0, 0, 0,0.4);
+  padding: 10px;
+}
+
+.bag{
+  grid-area: bag;
+  border-right: 5px inset white;
+  border-bottom: 5px inset white;
+  background-color: rgba(0, 0, 0,0.4);
+  padding: 10px;
+}
+
+.stats{
+  text-align: left;
+  grid-area: stats;
+  border-left: 5px outset white;
+  border-bottom: 5px groove white;
+  background-color: rgba(0, 0, 0,0.4);
+  padding: 10px;
+}
+
