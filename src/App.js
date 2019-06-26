@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {PokeApi} from './config/apiConfig';
 import PokeHeader from './component/Header/PokeHeader';
-import PokeMain from './component/body/pokeMain';
+import PokeMain from './component/body/PokeMain';
 
 
 import './App.css';
@@ -11,6 +11,8 @@ export default class App extends Component {
   constructor(){
     super();
     this.state = {
+      doneHere: false,
+      exploring: false,
       isLoaded: false,
       regions: [],
       locations: [],
@@ -18,6 +20,7 @@ export default class App extends Component {
       pokemonEncounter: [],
       currPokemon: [],
       bag: [],
+      currPokemonData: [],
     }
   }
 
@@ -84,6 +87,8 @@ export default class App extends Component {
       return PokeApi.get(`location-area/${res.data.areas[0].name}`)
       .then(poks => {
         this.setState({
+          exploring: false,
+          currPokemon: [],
           pokemonEncounter: poks.data.pokemon_encounters
         })
       })
@@ -107,6 +112,8 @@ export default class App extends Component {
       return PokeApi.get(`location-area/${ar[0].name}`)
       .then(poks => {
         this.setState({
+          exploring: false,
+          currPokemon: [],
           pokemonEncounter: poks.data.pokemon_encounters
         })
       })
@@ -120,6 +127,8 @@ export default class App extends Component {
       return res.data.pokemon_encounters
     }).then(poks => {
       this.setState({
+        exploring: false,
+        currPokemon: [],
         pokemonEncounter: poks
       })
     })
@@ -128,12 +137,34 @@ export default class App extends Component {
   explore = () => {
     var totalEncounter = this.state.pokemonEncounter.length
     var randomPoks = Math.floor(Math.random() * totalEncounter)
-    this.setState({
-      currPokemon: this.state.pokemonEncounter[randomPoks]
-    })
-
+    if (!this.state.pokemonEncounter.length){
+      this.setState({
+        pokemonEncounter: [],
+        currPokemon: [],
+      })
+      return alert('No Pokemons Here!')
+    }
+    PokeApi.get(`pokemon/${this.state.pokemonEncounter[randomPoks].pokemon.name}`)
+    .then(poke => {
+      this.setState({
+        currPokemon: this.state.pokemonEncounter[randomPoks].pokemon.name,
+         currPokemonData: poke.data,
+         exploring: true,
+      })
+        return poke
+      })
+        .catch(err => err+'empty')
   }
 
+  capture = (poks) => {
+    if (this.state.bag.length>5){
+      return alert('bag full!')
+    }
+    this.setState({
+      bag: [...this.state.bag, poks],
+      doneHere: true,
+    });
+  }
 
   render(){
     return (
@@ -149,7 +180,13 @@ export default class App extends Component {
         explore={this.explore}
         />
         <div className="pokeContainer">
-          <PokeMain/>          
+          <PokeMain
+          capture={this.capture}
+          bag={this.state.bag}
+          exploring={this.state.exploring}
+          randomPokemonData={this.state.currPokemonData}
+          randomPokemon={this.state.currPokemon}
+          />          
         </div>
    </div>
     )

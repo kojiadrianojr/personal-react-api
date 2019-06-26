@@ -30,7 +30,7 @@ body {
 }
 
 .pokeContainer{
-  background-color: rgba(0, 0, 0,0.5);
+  color: white;
   max-width: 75%;
   min-height: 80vh;
   margin: 50px auto;
@@ -46,20 +46,34 @@ body {
 
 .message{
   grid-area: hint;
-  border: 1px solid black;
+  background-color: rgba(0, 0, 0,0.4);
+  border: 5px outset white;
+  border-right: 5px inset white;
+  border-bottom: none;
+  padding: 10px;
 }
 
 .display{
   grid-area: display;
-  border: 1px solid black;
+  border-left: 5px outset white;
+  background-color: rgba(0, 0, 0,0.4);
+  padding: 10px;
 }
 
 .bag{
   grid-area: bag;
-  border: 1px solid black;
+  border-right: 5px inset white;
+  border-bottom: 5px inset white;
+  background-color: rgba(0, 0, 0,0.4);
+  padding: 10px;
 }
 
 .stats{
+  text-align: left;
   grid-area: stats;
-  border: 1px solid black;
+  border-left: 5px outset white;
+  border-bottom: 5px groove white;
+  background-color: rgba(0, 0, 0,0.4);
+  padding: 10px;
 }
+
